@@ -200,14 +200,19 @@ jobs:
           echo "Built packages:"
           ls -la awgrelease/
 
-      - name: List built packages
-        run: find openwrt/bin -name "*.ipk" 2>/dev/null || echo "No ipk files found"
+      - name: Find and list all ipk files
+        run: |
+          echo "Searching for ipk files in openwrt/bin..."
+          find openwrt/bin -type f -name "*.ipk" 2>/dev/null || echo "No files found in openwrt/bin"
+          echo ""
+          echo "Searching entire workspace..."
+          find . -type f -name "*.ipk" 2>/dev/null | head -20
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: amneziawg-packages-rockchip-armv8
-          path: openwrt/bin/**/*.ipk
+          path: "**/*.ipk"
 
 #      - name: Release
 #        uses: softprops/action-gh-release@v1
